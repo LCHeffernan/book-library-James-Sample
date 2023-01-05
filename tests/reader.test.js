@@ -27,6 +27,7 @@ describe("/readers", () => {
         expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
         expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
         expect(newReaderRecord.password).to.equal("password123");
+        expect(newReaderRecord.password.length).to.be.greaterThan(8);
         expect(response.status).to.equal(201);
       });
     });
@@ -43,7 +44,7 @@ describe("/readers", () => {
           password: "password123",
         }),
         Reader.create({
-          nme: "Arya Stark",
+          name: "Arya Stark",
           email: "vmorgul@me.com",
           password: "password123",
         }),

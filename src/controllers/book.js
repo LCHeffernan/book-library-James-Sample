@@ -24,13 +24,13 @@ exports.findBook = async (req, res) => {
 };
 
 exports.updateBook = async (req, res) => {
-  const bookId = req.params.id;
-  const updateData = req.body;
-  const book = await Book.findByPk(bookId);
-  const [updatedRows] = await Book.update(updateData, {
-    where: { id: bookId },
-  });
   try {
+    const bookId = req.params.id;
+    const updateData = req.body;
+    const book = await Book.findByPk(bookId);
+    const [updatedRows] = await Book.update(updateData, {
+      where: { id: bookId },
+    });
     if (!book) {
       res.status(404).json({ error: "Book not found :(" });
     }
@@ -41,10 +41,10 @@ exports.updateBook = async (req, res) => {
 };
 
 exports.deleteBook = async (req, res) => {
-  const bookId = req.params.id;
-  const book = await Book.findByPk(bookId);
-  const deletedRows = await Book.destroy({ where: { id: bookId } });
   try {
+    const bookId = req.params.id;
+    const book = await Book.findByPk(bookId);
+    const deletedRows = await Book.destroy({ where: { id: bookId } });
     if (!book) {
       res.status(404).json({ error: "Book not found :(" });
     }

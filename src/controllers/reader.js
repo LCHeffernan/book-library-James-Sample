@@ -1,9 +1,13 @@
 const { Reader } = require("../models");
 
 exports.createReader = async (req, res) => {
-  const newReader = await Reader.create(req.body);
-  res.status(201).json(newReader);
-};
+  try {
+    const newReader = await Reader.create(req.body);
+    res.status(201).json(newReader);
+} catch (err) {
+  res.status(500).json(err.message)
+}
+}
 
 exports.findReaders = async (req, res) => {
   const readers = await Reader.findAll();
@@ -24,13 +28,13 @@ exports.findReader = async (req, res) => {
 };
 
 exports.updateReader = async (req, res) => {
-  const readerId = req.params.id;
-  const updateData = req.body;
-  const reader = await Reader.findByPk(readerId);
-  const [updatedRows] = await Reader.update(updateData, {
-    where: { id: readerId },
-  });
   try {
+    const readerId = req.params.id;
+    const updateData = req.body;
+    const reader = await Reader.findByPk(readerId);
+    const [updatedRows] = await Reader.update(updateData, {
+      where: { id: readerId },
+    });
     if (!reader) {
       res.status(404).json({ error: "Reader not found :(" });
     }
@@ -41,10 +45,10 @@ exports.updateReader = async (req, res) => {
 };
 
 exports.deleteReader = async (req, res) => {
-  const readerId = req.params.id;
-  const reader = await Reader.findByPk(readerId);
-  const deletedRows = await Reader.destroy({ where: { id: readerId } });
   try {
+    const readerId = req.params.id;
+    const reader = await Reader.findByPk(readerId);
+    const deletedRows = await Reader.destroy({ where: { id: readerId } });
     if (!reader) {
       res.status(404).json({ error: "Reader not found :(" });
     }
