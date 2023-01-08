@@ -1,59 +1,25 @@
-const { Reader } = require("../models");
+const {
+  createItem,
+  findItems,
+  findItem,
+  updateItem,
+  deleteItem,
+} = require("./helpers");
 
-exports.createReader = async (req, res) => {
-  try {
-    const newReader = await Reader.create(req.body);
-    res.status(201).json(newReader);
-} catch (err) {
-  res.status(500).json(err.message)
-}
-}
+createReader = (req, res) => createItem(res, "reader", req.body);
 
-exports.findReaders = async (req, res) => {
-  const readers = await Reader.findAll();
-  res.status(200).json(readers);
-};
+findReaders = (_, res) => findItems(res, "reader");
 
-exports.findReader = async (req, res) => {
-  try {
-    const readerId = req.params.id;
-    const reader = await Reader.findByPk(readerId);
-    if (!reader) {
-      return res.status(404).json({ error: "Reader not found :(" });
-    }
-    res.status(200).json(reader);
-  } catch (err) {
-    res.status(500).json(err.message);
-  }
-};
+findReader = (req, res) => findItem(res, "reader", req.params.id);
 
-exports.updateReader = async (req, res) => {
-  try {
-    const readerId = req.params.id;
-    const updateData = req.body;
-    const reader = await Reader.findByPk(readerId);
-    const [updatedRows] = await Reader.update(updateData, {
-      where: { id: readerId },
-    });
-    if (!reader) {
-      res.status(404).json({ error: "Reader not found :(" });
-    }
-    res.status(200).json(reader);
-  } catch (err) {
-    res.status(500).json(err.message);
-  }
-};
+updateReader = (req, res) => updateItem(res, "reader", req.body, req.params.id);
 
-exports.deleteReader = async (req, res) => {
-  try {
-    const readerId = req.params.id;
-    const reader = await Reader.findByPk(readerId);
-    const deletedRows = await Reader.destroy({ where: { id: readerId } });
-    if (!reader) {
-      res.status(404).json({ error: "Reader not found :(" });
-    }
-    res.status(204).json(reader);
-  } catch (err) {
-    res.status(500).json(err.message);
-  }
+deleteReader = (req, res) => deleteItem(res, "reader", req.params.id);
+
+module.exports = {
+  createReader,
+  findReader,
+  findReaders,
+  updateReader,
+  deleteReader,
 };

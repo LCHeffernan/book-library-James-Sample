@@ -1,25 +1,16 @@
 const express = require("express");
-
-// Reader routes
 const readerController = require("../controllers/reader");
+const router = express.Router();
 
-const readerRouter = express.Router();
+router
+  .route("/")
+  .post(readerController.createReader)
+  .get(readerController.findReaders);
 
-readerRouter.post("/", readerController.createReader);
+router
+  .route("/:id")
+  .get(readerController.findReader)
+  .patch(readerController.updateReader)
+  .delete(readerController.deleteReader);
 
-readerRouter.get("/", readerController.findReaders);
-
-readerRouter.get("/:id", readerController.findReader);
-
-readerRouter.patch("/:id", readerController.updateReader);
-
-readerRouter.delete("/:id", readerController.deleteReader);
-
-// Book Routes
-const bookController = require("../controllers/book");
-
-const bookRouter = express.Router();
-
-bookRouter.post("/books", bookController.createBook);
-
-module.exports = readerRouter;
+module.exports = router;

@@ -29,6 +29,26 @@ describe("/books", () => {
         expect(newBookRecord.author).to.equal("Brian Jaques");
         expect(newBookRecord.genre).to.equal("Fantasy");
       });
+      it("throws an error when there is no title", async () => {
+        const response = await request(app).post("/books").send({
+          author: "Brian Jaques",
+          genre: "Fantasy",
+          ISBN: "72A",
+        });
+        expect(response.body).to.equal(
+          "notNull Violation: Please enter a title"
+        );
+      });
+      it("throws an error when there is no author", async () => {
+        const response = await request(app).post("/books").send({
+          title: "Redwall",
+          genre: "Fantasy",
+          ISBN: "72A",
+        });
+        expect(response.body).to.equal(
+          "notNull Violation: Please enter an author"
+        );
+      });
     });
   });
 
@@ -85,7 +105,7 @@ describe("/books", () => {
         const response = await request(app).get("/books/1234");
 
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("Book not found :(");
+        expect(response.body.error).to.equal("Requested book not found :(");
       });
     });
     describe("PATCH /books/:id", () => {
@@ -107,7 +127,7 @@ describe("/books", () => {
           .send({ genre: "non-fiction" });
 
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("Book not found :(");
+        expect(response.body.error).to.equal("Requested book not found :(");
       });
     });
     describe("DELETE /books/:id", () => {
@@ -122,7 +142,7 @@ describe("/books", () => {
       it("returns a 404 if book doesnt exist", async () => {
         const response = await request(app).delete("/books/1234");
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("Book not found :(");
+        expect(response.body.error).to.equal("Requested book not found :(");
       });
     });
   });

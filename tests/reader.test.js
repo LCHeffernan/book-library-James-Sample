@@ -27,8 +27,37 @@ describe("/readers", () => {
         expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
         expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
         expect(newReaderRecord.password).to.equal("password123");
-        expect(newReaderRecord.password.length).to.be.greaterThan(8);
         expect(response.status).to.equal(201);
+      });
+      it("returns an error if a name isnt entered", async () => {
+        const response = await request(app).post("/readers").send({
+          email: "future_ms_darcy@gmail.com",
+          password: "password123",
+        });
+
+        expect(response.body).to.equal(
+          "notNull Violation: Reader.name cannot be null"
+        );
+      });
+      it("returns and error if an email is not valid", async () => {
+        const response = await request(app).post("/readers").send({
+          name: "Elizabeth Bennet",
+          email: "future_ms_darcygmail.com",
+          password: "password123",
+        });
+        expect(response.body).to.equal(
+          "Validation error: use a valid email address"
+        );
+      });
+      it("returns and error if the password is not between 8-16 letters", async () => {
+        const response = await request(app).post("/readers").send({
+          name: "Elizabeth Bennet",
+          email: "future_ms_darcy@gmail.com",
+          password: "pass",
+        });
+        expect(response.body).to.equal(
+          "Validation error: password too short or long"
+        );
       });
     });
   });
@@ -83,7 +112,7 @@ describe("/readers", () => {
         const response = await request(app).get("/readers/1234");
 
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("Reader not found :(");
+        expect(response.body.error).to.equal("Requested reader not found :(");
       });
     });
     describe("PATCH /readers/:id", () => {
@@ -105,7 +134,7 @@ describe("/readers", () => {
           .send({ email: "some_new_email@gmail.com" });
 
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("Reader not found :(");
+        expect(response.body.error).to.equal("Requested reader not found :(");
       });
     });
     describe("DELETE /readers/:id", () => {
@@ -120,7 +149,7 @@ describe("/readers", () => {
       it("returns a 404 if reader doesnt exist", async () => {
         const response = await request(app).delete("/readers/1234");
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("Reader not found :(");
+        expect(response.body.error).to.equal("Requested reader not found :(");
       });
     });
   });
