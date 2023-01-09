@@ -1,8 +1,13 @@
-const { Model } = require("sequelize");
-const models = require("../models");
 const { Book, Reader } = require("../models");
 
 const get404Error = (model) => ({ error: `Requested ${model} not found :(` });
+
+const removePassword = (obj) => {
+  if (obj.hasOwnProperty('password')) {
+    delete obj.password
+  }
+  return obj
+}
 
 const getModel = (model) => {
   const models = {
@@ -16,7 +21,8 @@ createItem = async (res, model, item) => {
   const Model = getModel(model);
   try {
     const newItem = await Model.create(item);
-    res.status(201).json(newItem);
+    const itemWithoutPassword = removePassword(newItem.get())
+    res.status(201).json(itemWithoutPassword);
   } catch (err) {
     res.status(400).json(err.message);
   }
@@ -26,7 +32,8 @@ findItems = async (res, model) => {
   const Model = getModel(model);
   try {
     const items = await Model.findAll();
-    res.status(200).json(items);
+    const itemsWithoutPassword = items.map((item) => removePassword(item.get()))
+    res.status(200).json(itemsWithoutPassword);
   } catch (err) {
     res.status(400).json(err.message);
   }
@@ -39,7 +46,8 @@ findItem = async (res, model, id) => {
     if (!item) {
       return res.status(404).json(get404Error(model));
     }
-    res.status(200).json(item);
+    const itemWithoutPassword = removePassword(item.get())
+    res.status(200).json(itemWithoutPassword);
   } catch (err) {
     res.status(400).json(err.message);
   }
@@ -55,7 +63,8 @@ updateItem = async (res, model, data, id) => {
     if (!updatedItem) {
       res.status(404).json(get404Error(model));
     }
-    res.status(200).json(item);
+    const itemWithoutPassword = removePassword(item.get())
+    res.status(200).json(itemWithoutPassword);
   } catch (err) {
     res.status(500).json(err.message);
   }
