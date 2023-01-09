@@ -37,7 +37,7 @@ describe("/readers", () => {
         });
 
         expect(response.body).to.equal(
-          "notNull Violation: Reader.name cannot be null"
+          "notNull Violation: Please enter a name"
         );
       });
       it("returns and error if an email is not valid", async () => {

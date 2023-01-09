@@ -14,7 +14,7 @@ describe("/books", () => {
       it("creates a new book in the database", async () => {
         const response = await request(app).post("/books").send({
           title: "Redwall",
-          author: "Brian Jaques",
+          author: "Brian Jacques",
           genre: "Fantasy",
           ISBN: "72A",
         });
@@ -25,12 +25,12 @@ describe("/books", () => {
         expect(response.status).to.equal(201);
         expect(response.body.title).to.equal("Redwall");
         expect(newBookRecord.title).to.equal("Redwall");
-        expect(newBookRecord.author).to.equal("Brian Jaques");
+        expect(newBookRecord.author).to.equal("Brian Jacques");
         expect(newBookRecord.genre).to.equal("Fantasy");
       });
       it("throws an error when there is no title", async () => {
         const response = await request(app).post("/books").send({
-          author: "Brian Jaques",
+          author: "Brian Jacques",
           genre: "Fantasy",
           ISBN: "72A",
         });
@@ -64,7 +64,7 @@ describe("/books", () => {
         }),
         Book.create({
           title: "Redwall",
-          author: "Brian Jaques",
+          author: "Brian Jacques",
           genre: "Fantasy",
           ISBN: "72A",
         }),

@@ -1,18 +1,20 @@
-const { Book, Reader } = require("../models");
+const { Book, Reader, Genre, Author } = require("../models");
 
 const get404Error = (model) => ({ error: `Requested ${model} not found :(` });
 
 const removePassword = (obj) => {
-  if (obj.hasOwnProperty('password')) {
-    delete obj.password
+  if (obj.hasOwnProperty("password")) {
+    delete obj.password;
   }
-  return obj
-}
+  return obj;
+};
 
 const getModel = (model) => {
   const models = {
     book: Book,
     reader: Reader,
+    genre: Genre,
+    author: Author,
   };
   return models[model];
 };
@@ -21,7 +23,7 @@ createItem = async (res, model, item) => {
   const Model = getModel(model);
   try {
     const newItem = await Model.create(item);
-    const itemWithoutPassword = removePassword(newItem.get())
+    const itemWithoutPassword = removePassword(newItem.get());
     res.status(201).json(itemWithoutPassword);
   } catch (err) {
     res.status(400).json(err.message);
@@ -32,7 +34,9 @@ findItems = async (res, model) => {
   const Model = getModel(model);
   try {
     const items = await Model.findAll();
-    const itemsWithoutPassword = items.map((item) => removePassword(item.get()))
+    const itemsWithoutPassword = items.map((item) =>
+      removePassword(item.get())
+    );
     res.status(200).json(itemsWithoutPassword);
   } catch (err) {
     res.status(400).json(err.message);
@@ -46,7 +50,7 @@ findItem = async (res, model, id) => {
     if (!item) {
       return res.status(404).json(get404Error(model));
     }
-    const itemWithoutPassword = removePassword(item.get())
+    const itemWithoutPassword = removePassword(item.get());
     res.status(200).json(itemWithoutPassword);
   } catch (err) {
     res.status(400).json(err.message);
@@ -63,7 +67,7 @@ updateItem = async (res, model, data, id) => {
     if (!updatedItem) {
       res.status(404).json(get404Error(model));
     }
-    const itemWithoutPassword = removePassword(item.get())
+    const itemWithoutPassword = removePassword(item.get());
     res.status(200).json(itemWithoutPassword);
   } catch (err) {
     res.status(500).json(err.message);

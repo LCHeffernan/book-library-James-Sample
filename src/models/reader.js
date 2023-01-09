@@ -3,7 +3,7 @@ module.exports = (connection, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      vlidate: {
+      validate: {
         notEmpty: { args: true, msg: "Please enter a name" },
         notNull: { args: true, msg: "Please enter a name" },
       },
