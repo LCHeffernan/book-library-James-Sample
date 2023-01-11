@@ -4,6 +4,8 @@ const router = express.Router();
 
 router.route("/").post(authorController.createAuthor).get(authorController.findAuthors);
 
+router.route("/bulk").post(authorController.createBulkAuthors);
+
 router
   .route("/:id")
   .get(authorController.findAuthor)

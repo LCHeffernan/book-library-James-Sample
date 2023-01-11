@@ -11,6 +11,9 @@ const setupDatabase = () => {
     host: PGHOST,
     port: PGPORT,
     dialect: "postgres",
+    define: {
+      timestamps: false
+    },
     logging: false,
   });
 
@@ -18,6 +21,13 @@ const setupDatabase = () => {
   const Book = BookModel(connection, Sequelize);
   const Author = AuthorModel(connection, Sequelize);
   const Genre = GenreModel(connection, Sequelize);
+
+  Reader.hasMany(Book);
+  Genre.hasMany(Book);
+  Book.belongsTo(Genre);
+  Book.hasOne(Reader)
+  Author.hasMany(Book);
+  Book.belongsTo(Author)
 
   connection.sync({ alter: true });
   return {

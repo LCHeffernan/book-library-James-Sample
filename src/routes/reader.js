@@ -7,6 +7,8 @@ router
   .post(readerController.createReader)
   .get(readerController.findReaders);
 
+router.route("/bulk").post(readerController.createBulkReaders);
+
 router
   .route("/:id")
   .get(readerController.findReader)

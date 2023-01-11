@@ -4,6 +4,8 @@ const router = express.Router();
 
 router.route("/").post(genreController.createGenre).get(genreController.findGenres);
 
+router.route("/bulk").post(genreController.createBulkGenres);
+
 router
   .route("/:id")
   .get(genreController.findGenre)

@@ -26,6 +26,7 @@ module.exports = (connection, DataTypes) => {
         notNull: { args: true, msg: "Please enter a password" },
       },
     },
+    books: DataTypes.STRING
   };
 
   const ReaderModel = connection.define("Reader", schema);

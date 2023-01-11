@@ -1,5 +1,6 @@
 const {
     createItem,
+    createBulkItems,
     findItems,
     findItem,
     updateItem,
@@ -7,6 +8,8 @@ const {
   } = require("./helpers");
 
   createGenre = (req, res) => createItem(res, "genre", req.body);
+
+  createBulkGenres = (req, res) => createBulkItems(res, "genre", req.body);
 
   findGenres = (_, res) => findItems(res, "genre");
   
@@ -17,7 +20,8 @@ const {
   deleteGenre = (req, res) => deleteItem(res, "genre", req.params.id);
   
   module.exports = {
-    createGenre,
+    createGenre, 
+    createBulkGenres,
     findGenre,
     findGenres,
     updateGenre,

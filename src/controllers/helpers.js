@@ -19,6 +19,18 @@ const getModel = (model) => {
   return models[model];
 };
 
+const getOptions = (model) => {
+  if (model === 'book') return { include: [Genre, Author, Reader] };
+
+  if (model === 'genre') return { include: Book };
+
+  if (model === 'author') return { include: Book };
+
+  if (model == 'reader') return { include: Book};
+
+  return {};
+}
+
 createItem = async (res, model, item) => {
   const Model = getModel(model);
   try {
@@ -30,10 +42,22 @@ createItem = async (res, model, item) => {
   }
 };
 
-findItems = async (res, model) => {
+createBulkItems = async (res, model, ...items) => {
   const Model = getModel(model);
   try {
-    const items = await Model.findAll();
+    const newItems = await Model.bulkCreate(...items);
+    const itemsWithoutPassword = newItems.map((items) => removePassword(items.get()));
+    res.status(201).json(itemsWithoutPassword)
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+}
+
+findItems = async (res, model) => {
+  const Model = getModel(model);
+  const options = getOptions(model);
+  try {
+    const items = await Model.findAll({ ...options});
     const itemsWithoutPassword = items.map((item) =>
       removePassword(item.get())
     );
@@ -45,8 +69,9 @@ findItems = async (res, model) => {
 
 findItem = async (res, model, id) => {
   const Model = getModel(model);
+  const options = getOptions(model);
   try {
-    const item = await Model.findByPk(id);
+    const item = await Model.findByPk(id, { ...options });
     if (!item) {
       return res.status(404).json(get404Error(model));
     }
@@ -92,6 +117,7 @@ deleteItem = async (res, model, id) => {
 
 module.exports = {
   createItem,
+  createBulkItems,
   findItems,
   findItem,
   updateItem,

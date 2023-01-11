@@ -15,7 +15,6 @@ describe("/books", () => {
         const response = await request(app).post("/books").send({
           title: "Redwall",
           author: "Brian Jacques",
-          genre: "Fantasy",
           ISBN: "72A",
         });
 
@@ -25,13 +24,11 @@ describe("/books", () => {
         expect(response.status).to.equal(201);
         expect(response.body.title).to.equal("Redwall");
         expect(newBookRecord.title).to.equal("Redwall");
-        expect(newBookRecord.author).to.equal("Brian Jacques");
-        expect(newBookRecord.genre).to.equal("Fantasy");
+       expect(newBookRecord.author).to.equal("Brian Jacques");
       });
       it("throws an error when there is no title", async () => {
         const response = await request(app).post("/books").send({
           author: "Brian Jacques",
-          genre: "Fantasy",
           ISBN: "72A",
         });
         expect(response.body).to.equal(
@@ -41,7 +38,6 @@ describe("/books", () => {
       it("throws an error when there is no author", async () => {
         const response = await request(app).post("/books").send({
           title: "Redwall",
-          genre: "Fantasy",
           ISBN: "72A",
         });
         expect(response.body).to.equal(
@@ -58,20 +54,17 @@ describe("/books", () => {
       books = await Promise.all([
         Book.create({
           title: "Winds of Winter",
-          author: "George Martin",
-          genre: "Fantasy",
+         author: "George Martin",
           ISBN: "87D",
         }),
         Book.create({
           title: "Redwall",
-          author: "Brian Jacques",
-          genre: "Fantasy",
+         author: "Brian Jacques",
           ISBN: "72A",
         }),
         Book.create({
           title: "Dune",
-          author: "Frank Herbert",
-          genre: "sci-fi",
+         author: "Frank Herbert",
           ISBN: "43R",
         }),
       ]);
@@ -87,7 +80,7 @@ describe("/books", () => {
           const expected = books.find((a) => a.id === book.id);
 
           expect(book.title).to.equal(expected.title);
-          expect(book.author).to.equal(expected.author);
+         expect(book.author).to.equal(expected.author);
         });
       });
     });
@@ -98,7 +91,7 @@ describe("/books", () => {
 
         expect(response.status).to.equal(200);
         expect(response.body.title).to.equal(book.title);
-        expect(response.body.author).to.equal(book.author);
+       expect(response.body.author).to.equal(book.author);
       });
       it("returns 404 if book doesnt exist", async () => {
         const response = await request(app).get("/books/1234");
@@ -108,22 +101,22 @@ describe("/books", () => {
       });
     });
     describe("PATCH /books/:id", () => {
-      it("updates books genre by id", async () => {
+      it("updates books title by id", async () => {
         const book = books[0];
         const response = await request(app)
           .patch(`/books/${book.id}`)
-          .send({ genre: "fiction" });
+          .send({ title: "new title" });
         const updatedBookRecord = await Book.findByPk(book.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(200);
-        expect(updatedBookRecord.genre).to.equal("fiction");
+        expect(updatedBookRecord.title).to.equal("new title");
       });
       it("returns a 404 if book doesnt exist", async () => {
         const response = await request(app)
           .patch("/books/1234")
-          .send({ genre: "non-fiction" });
+          .send({ title: "another title" });
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("Requested book not found :(");

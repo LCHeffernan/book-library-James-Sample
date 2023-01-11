@@ -16,9 +16,6 @@ module.exports = (connection, DataTypes) => {
         notNull: { args: true, msg: "Please enter an author" },
       },
     },
-    genre: {
-      type: DataTypes.STRING,
-    },
     ISBN: {
       type: DataTypes.STRING,
       unique: true,

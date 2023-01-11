@@ -1,5 +1,6 @@
 const {
     createItem,
+    createBulkItems,
     findItems,
     findItem,
     updateItem,
@@ -7,6 +8,8 @@ const {
   } = require("./helpers");
 
   createAuthor = (req, res) => createItem(res, "author", req.body);
+
+  createBulkAuthors = (req, res) => createBulkItems(res, "author", req.body); 
 
   findAuthors = (_, res) => findItems(res, "author");
   
@@ -18,6 +21,7 @@ const {
   
   module.exports = {
     createAuthor,
+    createBulkAuthors,
     findAuthor,
     findAuthors,
     updateAuthor,

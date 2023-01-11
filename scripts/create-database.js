@@ -46,7 +46,13 @@ const createDatabase = async (databaseName) => {
       default:
         console.log(err);
     }
-  } finally {
+  } 
+  // try {
+  //   console.log(`Populating ${databaseName}`)
+  // } catch (err) {
+  //   console.log("Database already populated")
+  // }
+  finally {
     client.end();
   }
 };

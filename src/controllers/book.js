@@ -1,5 +1,6 @@
 const {
   createItem,
+  createBulkItems,
   findItems,
   findItem,
   updateItem,
@@ -7,6 +8,8 @@ const {
 } = require("./helpers");
 
 createBook = (req, res) => createItem(res, "book", req.body);
+
+createBulkBooks = (req, res) => createBulkItems(res, "book", req.body);
 
 findBooks = (_, res) => findItems(res, "book");
 
@@ -18,6 +21,7 @@ deleteBook = (req, res) => deleteItem(res, "book", req.params.id);
 
 module.exports = {
   createBook,
+  createBulkBooks,
   findBook,
   findBooks,
   updateBook,
